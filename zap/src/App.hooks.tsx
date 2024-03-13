@@ -2,34 +2,29 @@ import { useEffect, useState } from "react";
 import { LightningAddress } from "@getalby/lightning-tools";
 import { requestProvider } from "@getalby/bitcoin-connect-react";
 
-export const useZap = (
-  depositAmount = 1,
-  depositMessage = "Robots Building Education Lecture"
-) => {
+export const useZap = () => {
   const [invoice, setInvoice] = useState(undefined);
 
   let payInvoice = async () => {
+    // get the sending user and send a transaction to invoice address
     const provider = await requestProvider();
     await provider.sendPayment(invoice);
   };
 
   let defineInvoice = async () => {
-    try {
-      const ln = new LightningAddress("levitatingnight182471@getalby.com");
+    // define a receiving address
+    const address = new LightningAddress("levitatingnight182471@getalby.com");
 
-      await ln.fetch();
+    await address.fetch();
 
-      let invoiceResult = (
-        await ln.requestInvoice({
-          satoshi: 1,
-          comment: "invoice requested",
-        })
-      ).paymentRequest;
+    let invoiceData = await address.requestInvoice({
+      satoshi: 1,
+      comment: "invoice requested",
+    });
 
-      setInvoice(invoiceResult);
-    } catch (error) {
-      console.error(error);
-    }
+    let result = invoiceData?.paymentRequest;
+
+    setInvoice(result);
   };
 
   useEffect(() => {

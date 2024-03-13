@@ -33,6 +33,7 @@ function App() {
 
   return (
     <>
+      {/* If the user connected a wallet, display their wallet's id */}
       {localStorage.getItem("logged_in") === "true" ? (
         <>
           <h2>your wallet key</h2>
@@ -42,12 +43,14 @@ function App() {
         </>
       ) : null}
 
+      {/* Handles the before and after of a login */}
       <Button onDisconnected={handleDisconnect} onConnected={handleConnect}>
         Connect Wallet
       </Button>
 
       <br />
 
+      {/* Sends money to an address when you press the button */}
       {localStorage.getItem("logged_in") === "true" ? (
         <button onClick={handleZap}>Zap bitcoin</button>
       ) : null}
